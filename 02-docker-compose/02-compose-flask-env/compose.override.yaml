@@ -1,0 +1,9 @@
+services:
+
+  flask-app:
+
+    environment:
+      APP_ENV: local-development
+
+    ports:
+      - "8080:5000"

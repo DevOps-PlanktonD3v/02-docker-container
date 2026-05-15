@@ -1,0 +1,18 @@
+services:
+  nodejs-app:
+    build: .
+    container_name: nodejs-compose-app
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:8-alpine
+    container_name: redis-compose
+    ports:
+      - "6379:6379"

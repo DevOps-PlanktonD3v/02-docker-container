@@ -1,0 +1,13 @@
+services:
+
+  flask-app:
+    build: .
+    container_name: flask-env-app
+    ports:
+      - "${PORT}:5000"
+
+    environment:
+      APP_NAME: ${APP_NAME}
+      APP_ENV: ${APP_ENV}
+      APP_VERSION: ${APP_VERSION}
+      PORT: ${PORT}
