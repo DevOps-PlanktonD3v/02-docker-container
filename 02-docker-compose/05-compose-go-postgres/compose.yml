@@ -1,0 +1,36 @@
+services:
+
+  golang-api:
+    build: .
+    container_name: golang-network-api
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: networkinglab
+    depends_on:
+      - postgres
+    networks:
+      - backend
+      - monitoring
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-network-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: networkinglab
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+      - monitoring
+
+networks:
+  backend:
+  monitoring:
