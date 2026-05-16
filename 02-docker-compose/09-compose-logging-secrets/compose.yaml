@@ -1,0 +1,50 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"              
+        tag: nginx.access
+    depends_on:
+      - fluentd
+  fluentd:
+    image: fluent/fluentd:v1.16-debian-1
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - ./fluent.conf:/fluentd/etc/fluent.conf:ro
+      - fluentd_logs:/fluentd/log
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_DB: appdb
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  stress:
+    image: polinux/stress
+    command: stress --cpu 1 --vm 1 --vm-bytes 64M
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"   # max 50% dari 1 CPU core
+          memory: 128M   # max 128 MB RAM
+secrets:
+  postgres_password:
+    file: ./postgres_password.txt
+
+volumes:
+  pgdata:
+  fluentd_logs:
