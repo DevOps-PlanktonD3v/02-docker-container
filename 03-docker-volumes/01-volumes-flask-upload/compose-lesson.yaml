@@ -1,0 +1,24 @@
+services:
+  flask-upload:
+    build: .
+    container_name: flask-upload-app
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      UPLOAD_FOLDER: /app/uploads
+    volumes:
+      # Named Volume — data persists across container restarts, managed by Docker
+      - uploads_data:/app/uploads
+
+      # Bind Mount — maps a host directory into the container
+      # useful for inspecting files directly from the host
+      - ./host-uploads:/app/host-uploads
+
+      # Anonymous Volume — no name, created and managed by Docker
+      # data is lost when the container is removed
+      - /app/tmp-cache
+
+# Named Volume declaration — required when using named volumes in services
+volumes:
+  uploads_data:

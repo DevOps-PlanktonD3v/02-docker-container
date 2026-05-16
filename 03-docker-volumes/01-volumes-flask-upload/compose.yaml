@@ -1,0 +1,11 @@
+services:
+  flask-upload:
+    build: .
+    container_name: flask-upload-app
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      UPLOAD_FOLDER: /app/uploads
+    volumes:
+      - ./uploads:/app/uploads
