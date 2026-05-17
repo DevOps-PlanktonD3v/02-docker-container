@@ -1,0 +1,13 @@
+{
+  "name": "express-networking-lab",
+  "version": "1.0.0",
+  "description": "Docker Network Isolation Lab - Express + Redis",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "redis": "^4.7.0"
+  }
+}
