@@ -1,0 +1,43 @@
+services:
+  redis:
+    image: redis:8-alpine
+    container_name: redis-tmpfs
+    ports:
+      - "6379:6379"
+    tmpfs:
+      - /data
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-persistent
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:8
+    container_name: mongodb-stateful
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  nfs-server:
+    image: itsthenetwork/nfs-server-alpine
+    container_name: nfs-storage
+    privileged: true
+    environment:
+      SHARED_DIRECTORY: /nfs-data
+    ports:
+      - "2049:2049"
+    volumes:
+      - ./nfs-data:/nfs-data
+
+volumes:
+  postgres-data:
+  mongo-data:
