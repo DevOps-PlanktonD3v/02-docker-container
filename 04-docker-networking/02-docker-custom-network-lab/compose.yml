@@ -1,0 +1,42 @@
+services:
+
+  flask-app:
+    build: .
+
+    container_name: flask-network-app
+
+    ports:
+      - "5000:5000"
+
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: appdb
+
+    depends_on:
+      - postgres
+
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:17-alpine
+
+    container_name: postgres-network-db
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: appdb
+
+    ports:
+      - "5432:5432"
+
+    networks:
+      - backend
+
+networks:
+
+  backend:
