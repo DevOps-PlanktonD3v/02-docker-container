@@ -1,0 +1,18 @@
+services:
+  secure-nginx:
+    image: nginx:alpine
+    container_name: secure-nginx
+    ports:
+      - "8080:80"
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+
+  docker-dind:
+    image: docker:28-dind
+    container_name: docker-dind
+    privileged: true
+    volumes:
+      - /var/lib/docker
+      - ./shared:/shared:rshared
