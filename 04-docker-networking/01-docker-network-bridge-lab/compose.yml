@@ -1,0 +1,11 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-bridge
+    ports:
+      - "8080:80"
+
+  alpine:
+    image: alpine:latest
+    container_name: alpine-client
+    command: sh -c "apk add curl && tail -f /dev/null"
