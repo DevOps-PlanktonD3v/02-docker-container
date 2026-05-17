@@ -1,0 +1,58 @@
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - haproxy
+    networks:
+      - frontend
+
+  haproxy:
+    image: haproxy:lts-alpine
+    container_name: haproxy-lb
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    networks:
+      frontend:
+      backend:
+        ipv4_address: 172.30.0.10
+
+  nodejs-app-1:
+    build: .
+    container_name: nodejs-app-1
+    environment:
+      PORT: 3000
+    networks:
+      backend:
+        ipv4_address: 172.30.0.11
+
+  nodejs-app-2:
+    build: .
+    container_name: nodejs-app-2
+    environment:
+      PORT: 3000
+    networks:
+      backend:
+        ipv4_address: 172.30.0.12
+
+  monitoring:
+    image: nicolaka/netshoot
+    container_name: monitoring-host
+    command: sleep infinity
+    network_mode: host
+    cap_add:
+      - NET_RAW
+    extra_hosts:
+      - "app-nodejs.lab.cloud:172.30.0.10"
+
+networks:
+  frontend:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
