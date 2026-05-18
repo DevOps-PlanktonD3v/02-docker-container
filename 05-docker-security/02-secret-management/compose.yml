@@ -1,0 +1,30 @@
+services:
+
+  flask-app:
+    build: .
+    container_name: flask-secret-app
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_NAME: appdb
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-secret-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: appdb
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
