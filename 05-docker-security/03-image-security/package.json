@@ -1,0 +1,12 @@
+{
+  "name": "docker-image-security-demo",
+  "version": "1.0.0",
+  "description": "Node.js Express app for learning Docker image security",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
